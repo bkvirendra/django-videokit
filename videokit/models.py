@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.core.files.storage import default_storage
 from django.db import models
 from django.db.models import signals
+from django.core.checks import Error
 
 import subprocess
 
@@ -48,7 +49,7 @@ class VideoField(models.FileField):
         response = subprocess.call(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         if response != 0:
             return [        
-                checks.Error(
+                Error(
                     'ffmpeg is not installed',
                     hint = ('Install FFMPEG from https://www.ffmpeg.org'),
                     obj = self,
@@ -59,7 +60,7 @@ class VideoField(models.FileField):
         response = subprocess.call(command, shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
         if response != 0:
             return [        
-                checks.Error(
+                Error(
                     'mediainfo is not installed',
                     hint = ('Install Mediainfo from https://mediaarea.net'),
                     obj = self,
